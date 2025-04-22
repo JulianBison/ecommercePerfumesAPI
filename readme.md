@@ -1,2 +1,2 @@
-# book-champions-api
+# eccomercePerfumesAPI
 ## Tech stack: Node, Express and SQLite
