@@ -4,7 +4,13 @@ import { PORT } from "./config.js";
 import { sequelize } from "./db.js";
 import bookRoutes from "./routes/books.routes.js";
 
-import "./model/Book.js";
+import "./model/Role.js";
+import "./model/User.js";
+import "./model/Product.js";
+import "./model/Order.js";
+import "./model/OrderDetail.js";
+
+import "./model/relations.js";
 
 const app = express();
 
