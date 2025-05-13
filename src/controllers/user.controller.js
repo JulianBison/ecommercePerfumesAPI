@@ -1,7 +1,7 @@
 import {
-  createUser,
   getAllUsers,
   getUserById,
+  createUser,
   updateUser,
   deleteUser,
 } from "../services/user.services.js";

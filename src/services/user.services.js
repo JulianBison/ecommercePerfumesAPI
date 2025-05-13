@@ -1,4 +1,4 @@
-import User from "../model/User.js";
+import User from "../models/User.js";
 
 export const createUser = async (data) => {
   return await User.create(data);
@@ -14,16 +14,15 @@ export const getUserById = async (id) => {
 
 export const updateUser = async (id, data) => {
   const user = await User.findByPk(id);
-  if (user) {
-    return await user.update(data);
-  }
-  return null;
+  if (!user) return null;
+  await user.update(data);
+  return user;
 };
 
 export const deleteUser = async (id) => {
   const user = await User.findByPk(id);
-  if (user) {
-    return await user.destroy();
-  }
-  return null;
+  if (!user) return null;
+  await user.destroy();
+
+  return user;
 };

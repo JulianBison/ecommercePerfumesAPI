@@ -1,6 +1,6 @@
-import Order from "../model/Order.js";
-import OrderItem from "./../model/OrderItem.js";
-import Product from "./../model/Product.js";
+import Order from "../models/Order.js";
+import OrderItem from "../models/OrderItem.js";
+import Product from "../models/Product.js";
 
 export const createOrder = async (datos) => {
   return await Order.create(datos, {
@@ -22,16 +22,14 @@ export const getOrderById = async (id) => {
 
 export const updateOrder = async (id, datos) => {
   const orden = await Order.findByPk(id);
-  if (orden) {
-    return await orden.update(datos);
-  }
-  return null;
+  if (!orden) return null;
+  await orden.update(datos);
+  return orden;
 };
 
 export const deleteOrder = async (id) => {
   const orden = await Order.findByPk(id);
-  if (orden) {
-    return await orden.destroy();
-  }
-  return null;
+  if (!orden) return null;
+  await orden.destroy();
+  return orden;
 };
