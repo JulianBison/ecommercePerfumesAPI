@@ -28,8 +28,8 @@ export const showProduct = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const newProduct = await createProduct(req.body);
-    res.status(201).json(newProduct);
+    const product = await createProduct(req.body);
+    res.status(201).json(product);
   } catch (error) {
     res.status(500).json({ error: "Error al crear el producto" });
   }
@@ -37,10 +37,10 @@ export const addProduct = async (req, res) => {
 
 export const editProduct = async (req, res) => {
   try {
-    const updated = await updateProduct(req.params.id, req.body);
-    if (!updated)
+    const product = await updateProduct(req.params.id, req.body);
+    if (!product)
       return res.status(404).json({ error: "Producto no encontrado" });
-    res.json(updated);
+    res.json(product);
   } catch (error) {
     res.status(500).json({ error: "Error al actualizar el producto" });
   }
@@ -48,8 +48,8 @@ export const editProduct = async (req, res) => {
 
 export const removeProduct = async (req, res) => {
   try {
-    const deleted = await deleteProduct(req.params.id);
-    if (!deleted)
+    const product = await deleteProduct(req.params.id);
+    if (!product)
       return res.status(404).json({ error: "Producto no encontrado" });
     res.json({ message: "Producto eliminado" });
   } catch (error) {

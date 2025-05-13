@@ -6,11 +6,15 @@ import { sequelize } from "./db.js";
 import "./model/relations.js";
 
 import productRoutes from "./routes/product.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 
 const app = express();
 
 app.use(express.json());
-app.use("/products", productRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/order", orderRoutes);
+app.use("/api/users", userRoutes);
 
 async function main() {
   try {
