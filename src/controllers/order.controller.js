@@ -27,9 +27,11 @@ export const showOrder = async (req, res) => {
 
 export const addOrder = async (req, res) => {
   try {
+    console.log("Orden recibida:", req.body);
     const order = await createOrder(req.body);
     res.status(201).json(order);
   } catch (error) {
+    console.error("Error al crear la orden:", error.message);
     res
       .status(500)
       .json({ error: "Error al crear la orden", detalle: error.message });
