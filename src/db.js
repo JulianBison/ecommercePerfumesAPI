@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
-import { DB_NAME, DB_USER, DB_PASS, DB_HOST, DB_PORT } from "./config.js";
+import { DB_TYPE,DB_STORAGE } from "./config.js";
 
-export const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
-  host: DB_HOST,
-  port: DB_PORT,
-  dialect: "mysql",
-});
+
+export const sequelize = new Sequelize({
+  dialect: DB_TYPE,
+  storage: DB_STORAGE
+})
