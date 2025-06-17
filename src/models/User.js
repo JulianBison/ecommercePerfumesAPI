@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../db.js";
+import { sequelize } from "../../db.js";
 
 const User = sequelize.define(
   "User",
@@ -31,7 +31,7 @@ const User = sequelize.define(
     },
     role_id: {
       type: DataTypes.INTEGER,
-      defaultValue: 1,
+      defaultValue: 2,
     },
     address: {
       type: DataTypes.TEXT,

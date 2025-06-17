@@ -1,0 +1,79 @@
+import User from "..//models/User.js";
+import Role from "..//models/Role.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
+export const loginUser = async ({ email, password }) => {
+  const user = await User.scope(null).findOne({
+    where: { email },
+    attributes: [
+      "id",
+      "first_name",
+      "last_name",
+      "email",
+      "address",
+      "password",
+      "role_id",
+    ],
+    include: [
+      {
+        model: Role,
+        attributes: ["name"],
+      },
+    ],
+  });
+
+  console.log("Usuario encontrado:", user?.toJSON());
+  console.log("Password ingresada:", password);
+
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    const error = new Error("Credenciales inválidas");
+    error.status = 401;
+    throw error;
+  }
+
+  const payload = {
+    id: user.id,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    email: user.email,
+    address: user.address,
+    role: user.Role?.name || "user",
+  };
+
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+};
+
+export const registerUser = async ({
+  first_name,
+  last_name,
+  email,
+  password,
+}) => {
+  const existingUser = await User.findOne({ where: { email } });
+  if (existingUser) {
+    const error = new Error("El correo ya está registrado");
+    error.status = 400;
+    throw error;
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const newUser = await User.create({
+    first_name,
+    last_name,
+    email,
+    password: hashedPassword,
+    role_id: 2,
+  });
+
+  const payload = {
+    id: newUser.id,
+    first_name: newUser.first_name,
+    last_name: newUser.last_name,
+    email: newUser.email,
+    role: "user",
+  };
+
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+};

@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import {
   getAllUsers,
   getUserById,
@@ -5,6 +6,7 @@ import {
   updateUser,
   deleteUser,
 } from "../services/user.services.js";
+import { JWT_SECRET } from "../config.js";
 
 export const listUsers = async (req, res) => {
   try {
@@ -28,8 +30,17 @@ export const showUser = async (req, res) => {
 export const addUser = async (req, res) => {
   try {
     const user = await createUser(req.body);
-    res.status(201).json(user);
+    const token = jwt.sign({ id: user.id, role_id: user.role_id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(201).json({ token });
   } catch (error) {
+    if (error.name === "SequelizeUniqueConstraintError") {
+      return res.status(409).json({ error: "El correo ya está registrado" });
+    }
+
+    console.error("Error al crear el usuario:", error);
     res.status(500).json({ error: "Error al crear el usuario" });
   }
 };

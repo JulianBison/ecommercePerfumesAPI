@@ -1,7 +1,18 @@
 import User from "../models/User.js";
+import bcrypt from "bcrypt";
 
 export const createUser = async (data) => {
-  return await User.create(data);
+  try {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const user = await User.create({
+      ...data,
+      password: hashedPassword,
+    });
+    return user;
+  } catch (error) {
+    console.error("Error en createUser:", error);
+    throw error;
+  }
 };
 
 export const getAllUsers = async () => {
