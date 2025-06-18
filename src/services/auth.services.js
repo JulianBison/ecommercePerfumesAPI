@@ -27,7 +27,7 @@ export const loginUser = async ({ email, password }) => {
   console.log("Password ingresada:", password);
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    const error = new Error("Credenciales inválidas");
+    const error = new Error("Constraseñas inválidas");
     error.status = 401;
     throw error;
   }
@@ -41,7 +41,9 @@ export const loginUser = async ({ email, password }) => {
     role: user.Role?.name || "user",
   };
 
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+  return { token, user: payload };
 };
 
 export const registerUser = async ({
@@ -67,13 +69,21 @@ export const registerUser = async ({
     role_id: 2,
   });
 
+  // Obtener usuario con role para incluir nombre del role
+  const userWithRole = await User.findOne({
+    where: { id: newUser.id },
+    include: [{ model: Role, attributes: ["name"] }],
+  });
+
   const payload = {
-    id: newUser.id,
-    first_name: newUser.first_name,
-    last_name: newUser.last_name,
-    email: newUser.email,
-    role: "user",
+    id: userWithRole.id,
+    first_name: userWithRole.first_name,
+    last_name: userWithRole.last_name,
+    email: userWithRole.email,
+    role: userWithRole.Role?.name || "user",
   };
 
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+  return { token, user: payload };
 };
