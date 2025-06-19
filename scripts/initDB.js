@@ -1,4 +1,4 @@
-import { sequelize } from "../db.js";
+import { sequelize } from "../src/db.js";
 import Role from "../src/models/Role.js";
 
 async function init() {
