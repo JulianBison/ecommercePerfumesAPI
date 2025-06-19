@@ -1,7 +1,7 @@
 // src/app.js
 import express from "express";
 import { PORT } from "./config.js";
-import { sequelize } from "../db.js";
+import { sequelize } from "./db.js";
 
 import "./models/relations.js";
 

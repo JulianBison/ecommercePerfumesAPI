@@ -1,4 +1,4 @@
-import { sequelize } from "../db.js";
+import { sequelize } from "../src/db.js"
 import Product from "../src/models/Product.js";
 
 const productsData = [
