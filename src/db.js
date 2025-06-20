@@ -7,5 +7,5 @@ export const sequelize = new Sequelize({
   logging: true,
   define: {
     timestamps: false, // Habilita createdAt y updatedAt por defecto
-  }
+  },
 });
