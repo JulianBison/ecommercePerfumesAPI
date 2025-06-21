@@ -14,6 +14,7 @@ export const loginUser = async ({ email, password }) => {
       "address",
       "password",
       "role_id",
+      "active"
     ],
     include: [
       {
@@ -24,13 +25,18 @@ export const loginUser = async ({ email, password }) => {
   });
 
   console.log("Usuario encontrado:", user?.toJSON());
-  console.log("Password ingresada:", password);
+  //console.log("Password ingresada:", password);
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    const error = new Error("Constraseñas inválidas");
+    const error = new Error("Credenciales Invalidas");
     error.status = 401;
     throw error;
   }
+  if (!user.active) {
+    const error = new Error("Cuenta inactiva. Contacta al administrador");
+    error.status = 403; // 403 Forbidden
+    throw error;
+  } 
 
   const payload = {
     id: user.id,
@@ -39,6 +45,7 @@ export const loginUser = async ({ email, password }) => {
     email: user.email,
     address: user.address,
     role: user.Role?.name || "user",
+    
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
