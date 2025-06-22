@@ -11,10 +11,10 @@ import { checkRole } from "../auth/roles.middleware.js";
 
 const router = Router();
 
-router.get("/", verifyToken, checkRole("admin"), listUsers);
-router.get("/:id", showUser);
-router.post("/", addUser);
-router.put("/:id", editUser);
-router.delete("/:id", removeUser);
+router.get("/", verifyToken, checkRole("Sysadmin"), listUsers);
+router.get("/:id",checkRole("Sysadmin") ,showUser);
+router.post("/",checkRole("Sysadmin"), addUser);
+router.put("/:id",checkRole("Sysadmin"), editUser);
+router.delete("/:id",checkRole("Sysadmin"), removeUser);
 
 export default router;

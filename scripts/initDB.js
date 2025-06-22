@@ -7,9 +7,9 @@ async function init() {
     console.log("Tablas sincronizadas correctamente.");
 
     const roles = [
-      { name: "admin", description: "Administrador con todos los permisos" },
-      { name: "user", description: "Usuario estándar" },
-      { name: "guest", description: "Usuario invitado" },
+      { name: "Sysadmin", description: "Administrador con todos los permisos" },
+      { name: "Admin", description: "Administrador de la tienda" },
+      { name: "User", description: "Usuario estándar" },
     ];
 
     await Role.bulkCreate(roles, { ignoreDuplicates: true });

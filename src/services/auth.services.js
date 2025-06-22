@@ -34,7 +34,7 @@ export const loginUser = async ({ email, password }) => {
   }
   if (!user.active) {
     const error = new Error("Cuenta inactiva. Contacta al administrador");
-    error.status = 403; // 403 Forbidden
+    error.status = 403;
     throw error;
   } 
 
@@ -44,7 +44,7 @@ export const loginUser = async ({ email, password }) => {
     last_name: user.last_name,
     email: user.email,
     address: user.address,
-    role: user.Role?.name || "user",
+    role: user.Role?.name || "User",
     
   };
 
@@ -67,13 +67,15 @@ export const registerUser = async ({
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
+  
+
 
   const newUser = await User.create({
     first_name,
     last_name,
     email,
     password: hashedPassword,
-    role_id: 2,
+    role_id: 3,
   });
 
   // Obtener usuario con role para incluir nombre del role
@@ -87,7 +89,7 @@ export const registerUser = async ({
     first_name: userWithRole.first_name,
     last_name: userWithRole.last_name,
     email: userWithRole.email,
-    role: userWithRole.Role?.name || "user",
+    role: userWithRole.Role?.name || "User",
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
