@@ -1,5 +1,7 @@
 // src/app.js
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import { PORT } from "./config.js";
 import { sequelize } from "./db.js";
 
@@ -18,16 +20,26 @@ import cors from "cors";
 import { verifyToken } from "./auth/auth.middleware.js";
 import { verifyRole } from "./auth/roles.middleware.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173" }));
+// Configuración más segura y funcional
+app.use(cors({
+  origin: "http://localhost:5173", // o "*", para permitir todos durante desarrollo
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+}));
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, '..', 'public'))) // Servir archivos estáticos
+
 
 // Rutas públicas para autenticación
 app.use("/api/auth", authRoutes);
 
 // Rutas protegidas con token
-app.use("/api/products", verifyToken, productRoutes);
+app.use("/api/products", productRoutes);
 app.use("/api/order", verifyToken, orderRoutes);
 app.use("/api/users", verifyToken, userRoutes);
 app.use("/api/orderItems", verifyToken, orderItemRoutes);
