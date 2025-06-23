@@ -1,10 +1,20 @@
 import {
   getAllOrder,
-  getOrderById,
-  createOrder,
+  getOrdersById,
   updateOrder,
   deleteOrder,
 } from "../services/order.services.js";
+
+export const getUserOrders = async (req, res) => {
+  try {
+    const userId = req.userId; // Lo extrae del token
+    const orders = await getOrdersById(userId);
+    res.json(orders);
+  } catch (error) {
+    console.error("Error al obtener órdenes del usuario:", error.message);
+    res.status(500).json({ error: "Error al obtener las órdenes" });
+  }
+};
 
 export const listOrders = async (req, res) => {
   try {
@@ -22,19 +32,6 @@ export const showOrder = async (req, res) => {
     res.json(order);
   } catch (error) {
     res.status(500).json({ error: "Error al buscar la orden" });
-  }
-};
-
-export const addOrder = async (req, res) => {
-  try {
-    console.log("Orden recibida:", req.body);
-    const order = await createOrder(req.body);
-    res.status(201).json(order);
-  } catch (error) {
-    console.error("Error al crear la orden:", error.message);
-    res
-      .status(500)
-      .json({ error: "Error al crear la orden", detalle: error.message });
   }
 };
 

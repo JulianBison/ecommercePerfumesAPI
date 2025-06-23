@@ -6,16 +6,21 @@ export const createOrder = async (datos) => {
   try {
     const { items, ...ordenData } = datos;
 
-    // Crear la orden sin incluir los items directamente
-    const nuevaOrden = await Order.create(ordenData);
+    const nuevaOrden = await Order.create({
+      user_id: ordenData.user_id,
+      total: ordenData.total,
+      shippingAddress: ordenData.shippingAddress,
+      paymentMethod: ordenData.paymentMethod,
+      status: ordenData.status || "pending",
+      orderDate: ordenData.orderDate || new Date(),
+    });
 
-    // Agregar los items después de crear la orden
     if (items && items.length > 0) {
       const orderItems = items.map((item) => ({
-        orderId: nuevaOrden.id, // Relaciona los items con la orden recién creada
-        productoId: item.productoId,
-        cantidad: item.cantidad,
-        precio: item.precio,
+        order_id: nuevaOrden.id,
+        product_id: item.product_id,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
       }));
 
       await OrderItem.bulkCreate(orderItems);
@@ -34,9 +39,17 @@ export const getAllOrder = async () => {
   });
 };
 
-export const getOrderById = async (id) => {
-  return await Order.findByPk(id, {
-    include: [{ model: OrderItem, include: [Product] }],
+export const getOrdersById = async (id) => {
+  return await Order.findAll({
+    where: { user_id: id },
+    include: [
+      {
+        model: OrderItem,
+        as: "items",
+        include: [Product],
+      },
+    ],
+    order: [["orderDate", "DESC"]],
   });
 };
 

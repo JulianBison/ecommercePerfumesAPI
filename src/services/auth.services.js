@@ -23,8 +23,8 @@ export const loginUser = async ({ email, password }) => {
     ],
   });
 
-  console.log("Usuario encontrado:", user?.toJSON());
-  console.log("Password ingresada:", password);
+  console.log("Usuario encontrado:", user?.toJSON()); // linea a eliminar
+  console.log("Password ingresada:", password); // linea a eliminar
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     const error = new Error("Constraseñas inválidas");
