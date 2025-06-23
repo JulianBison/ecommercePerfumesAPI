@@ -11,7 +11,7 @@ import { verifyRole } from "../auth/roles.middleware.js";
 
 const router = Router();
 
-router.get("/", verifyToken, verifyRole(["superadmin","admin"]), listUsers);
+router.get("/", verifyToken, verifyRole( 'superadmin' , 'admin' ), listUsers);
 router.get("/:id",verifyRole("superadmin"), showUser);
 router.post("/",verifyRole("superadmin"), addUser);
 router.put("/:id",verifyRole("superadmin"), editUser);
