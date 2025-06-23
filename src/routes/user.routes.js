@@ -11,7 +11,7 @@ import { checkRole } from "../auth/roles.middleware.js";
 
 const router = Router();
 
-router.get("/", verifyToken, checkRole("admin"), listUsers);
+router.get("/", verifyToken, checkRole("user"), listUsers);
 router.get("/:id", showUser);
 router.post("/", addUser);
 router.put("/:id", editUser);

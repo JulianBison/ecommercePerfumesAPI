@@ -51,6 +51,7 @@ export const registerUser = async ({
   last_name,
   email,
   password,
+  address,
 }) => {
   const existingUser = await User.findOne({ where: { email } });
   if (existingUser) {
@@ -66,6 +67,7 @@ export const registerUser = async ({
     last_name,
     email,
     password: hashedPassword,
+    address,
     role_id: 2,
   });
 
@@ -80,6 +82,7 @@ export const registerUser = async ({
     first_name: userWithRole.first_name,
     last_name: userWithRole.last_name,
     email: userWithRole.email,
+    address: userWithRole.address,
     role: userWithRole.Role?.name || "user",
   };
 
