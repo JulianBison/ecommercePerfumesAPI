@@ -7,11 +7,11 @@ import {
   removeUser,
 } from "../controllers/user.controller.js";
 import { verifyToken } from "../auth/auth.middleware.js";
-import { checkRole } from "../auth/roles.middleware.js";
+import { verifyRole } from "../auth/roles.middleware.js";
 
 const router = Router();
 
-router.get("/", verifyToken, checkRole("user"), listUsers);
+router.get("/", verifyToken, verifyRole("admin"), listUsers);
 router.get("/:id", showUser);
 router.post("/", addUser);
 router.put("/:id", editUser);

@@ -38,7 +38,7 @@ export const loginUser = async ({ email, password }) => {
     last_name: user.last_name,
     email: user.email,
     address: user.address,
-    role: user.Role?.name || "user",
+    role: user.Role?.name || "admin",
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
@@ -68,7 +68,7 @@ export const registerUser = async ({
     email,
     password: hashedPassword,
     address,
-    role_id: 2,
+    role_id: 1,
   });
 
   // Obtener usuario con role para incluir nombre del role

@@ -35,7 +35,13 @@ export const createOrder = async (datos) => {
 
 export const getAllOrder = async () => {
   return await Order.findAll({
-    include: [{ model: OrderItem, include: [Product] }],
+    include: [
+      {
+        model: OrderItem,
+        as: "items",
+        include: [Product],
+      },
+    ],
   });
 };
 

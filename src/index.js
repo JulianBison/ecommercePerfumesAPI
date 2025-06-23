@@ -16,7 +16,7 @@ import authRoutes from "./routes/auth.routes.js";
 import cors from "cors";
 
 import { verifyToken } from "./auth/auth.middleware.js";
-import { checkRole } from "./auth/roles.middleware.js";
+import { verifyRole } from "./auth/roles.middleware.js";
 
 const app = express();
 
