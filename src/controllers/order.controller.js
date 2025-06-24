@@ -3,7 +3,32 @@ import {
   getOrdersById,
   updateOrder,
   deleteOrder,
+  createOrder,
 } from "../services/order.services.js";
+
+export const createOrderController = async (req, res) => {
+  try {
+    const userId = req.userId; // Lo toma del token JWT
+    const { items, total, shippingAddress, paymentMethod } = req.body;
+
+    if (!items || items.length === 0) {
+      return res.status(400).json({ error: "No hay productos en la orden" });
+    }
+
+    const nuevaOrden = await createOrder({
+      user_id: userId,
+      total,
+      shippingAddress,
+      paymentMethod,
+      items,
+    });
+
+    res.status(201).json(nuevaOrden);
+  } catch (error) {
+    console.error("Error al crear la orden:", error.message);
+    res.status(500).json({ error: "Error al crear la orden" });
+  }
+};
 
 export const getUserOrders = async (req, res) => {
   try {
