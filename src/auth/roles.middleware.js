@@ -21,7 +21,9 @@ export const verifyRoleOrOwnership = (...allowedRoles) => {
         return next();
       }
 
-      if (req.params.id && req.params.id !== req.user.id) {
+      if (req.params.id && req.params.id != req.user.id) {
+        console.log("ID del usuario:", req.user.id);
+        console.log("ID del recurso:", req.params.id);
         return res.status(403).json({ error: "Acceso no autorizado" });
       }
       next();
