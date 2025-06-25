@@ -2,11 +2,30 @@ import Order from "../models/Order.js";
 import OrderItem from "../models/OrderItem.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
+import {sequelize} from "../db.js";
 
 export const createOrder = async (datos) => {
+  const transaction = await sequelize.transaction();
   try {
     const { items, ...ordenData } = datos;
 
+    // 1. Verificar el stock de todos los productos
+    for (const item of items) {
+      const product = await Product.findOne({
+        where: { id: item.product_id },
+        transaction
+      });
+
+      if (!product) {
+        throw new Error(`Producto con ID ${item.product_id} no encontrado`);
+      }
+
+      if (product.stock < item.quantity) {
+        throw new Error(`Stock insuficiente para el producto ${product.name} (ID: ${product.id}). Stock disponible: ${product.stock}, cantidad solicitada: ${item.quantity}`);
+      }
+    }
+
+    // 2. Crear la orden
     const nuevaOrden = await Order.create({
       user_id: ordenData.user_id,
       total: ordenData.total,
@@ -14,8 +33,9 @@ export const createOrder = async (datos) => {
       paymentMethod: ordenData.paymentMethod,
       status: ordenData.status || "pending",
       orderDate: ordenData.orderDate || new Date(),
-    });
+    }, { transaction });
 
+    // 3. Crear los items de la orden y actualizar el stock
     if (items && items.length > 0) {
       const orderItems = items.map((item) => ({
         order_id: nuevaOrden.id,
@@ -24,13 +44,26 @@ export const createOrder = async (datos) => {
         unitPrice: item.unitPrice,
       }));
 
-      await OrderItem.bulkCreate(orderItems);
+      await OrderItem.bulkCreate(orderItems, { transaction });
+
+      // Actualizar el stock de cada producto
+      for (const item of items) {
+        await Product.decrement('stock', {
+          by: item.quantity,
+          where: { id: item.product_id },
+          transaction
+        });
+      }
     }
 
+    // Si todo sale bien, confirmar la transacción
+    await transaction.commit();
     return nuevaOrden;
   } catch (error) {
+    // Si hay algún error, deshacer todos los cambios
+    await transaction.rollback();
     console.error("Error en createOrder:", error.message);
-    throw new Error("Error al crear la orden en la base de datos");
+    throw new Error(error.message || "Error al crear la orden en la base de datos");
   }
 };
 

@@ -44,7 +44,7 @@ app.use("/api/order", verifyToken, orderRoutes);
 app.use("/api/users", verifyToken, userRoutes);
 app.use("/api/orderItems", verifyToken, orderItemRoutes);
 
-// Rutas protegidas con token y solo para admins
+
 app.use("/api/roles", verifyToken, roleRoutes);
 
 async function main() {

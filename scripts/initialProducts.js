@@ -695,7 +695,6 @@ const productsData = [
 async function seedProducts() {
   try {
     await sequelize.sync();
-    console.log("Modelo Product sincronizado con la base de datos");
 
     const productsToCreate = productsData.map((product) => ({
       name: product.titulo,
@@ -713,9 +712,7 @@ async function seedProducts() {
       ignoreDuplicates: true,
     });
 
-    console.log(
-      `Se han insertado ${createdProducts.length} productos en la base de datos`
-    );
+
   } catch (error) {
     console.error("Error al insertar productos:", error);
   } finally {

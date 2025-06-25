@@ -12,6 +12,11 @@ const OrderItems = sequelize.define(
     order_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'orders',
+        key: 'id'
+      },
+      onDelete: 'CASCADE'
     },
     product_id: {
       type: DataTypes.INTEGER,

@@ -14,6 +14,7 @@ export const loginUser = async ({ email, password }) => {
       "address",
       "password",
       "role_id",
+      "active"
     ],
     include: [
       {
@@ -23,8 +24,12 @@ export const loginUser = async ({ email, password }) => {
     ],
   });
 
-  console.log("Usuario encontrado:", user?.toJSON()); // linea a eliminar
-  console.log("Password ingresada:", password); // linea a eliminar
+  if (!user.active) {
+    const error = new Error("Tu cuenta está desactivada. Por favor, contacta al administrador.");
+    error.status = 403; 
+    throw error;
+  }
+
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     const error = new Error("Constraseñas inválidas");
@@ -68,7 +73,7 @@ export const registerUser = async ({
     email,
     password: hashedPassword,
     address,
-    role_id: 1,
+    role_id: 3,
   });
 
   const userWithRole = await User.findOne({

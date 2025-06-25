@@ -26,7 +26,17 @@ export const getUserById = async (id) => {
 export const updateUser = async (id, data) => {
   const user = await User.findByPk(id);
   if (!user) return null;
-  await user.update(data);
+  const updatableFields = ["first_name", "last_name", "email", "phone", "address", "password","role_id", "active"];
+  const filteredData = {};
+  for (const field of updatableFields) {
+    if (data[field] !== undefined && data[field] !== "" && data[field] !== null) {
+      filteredData[field] = data[field];
+    }
+  }
+  if (filteredData.password) {
+    filteredData.password = await bcrypt.hash(filteredData.password, 10);
+  }
+  await user.update(filteredData);
   return user;
 };
 
