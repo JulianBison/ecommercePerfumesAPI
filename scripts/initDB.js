@@ -4,7 +4,7 @@ import Role from "../src/models/Role.js";
 async function init() {
   try {
     await sequelize.sync();
-    console.log("Tablas sincronizadas correctamente.");
+
 
     const roles = [
       { name: "admin", description: "Administrador con todos los permisos" },
