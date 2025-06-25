@@ -6,6 +6,6 @@ export const sequelize = new Sequelize({
   storage: DB_STORAGE,
   logging: true,
   define: {
-    timestamps: false, // Habilita createdAt y updatedAt por defecto
+    timestamps: false,
   },
 });

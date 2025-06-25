@@ -18,7 +18,6 @@ export const verifyToken = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error("Error en verifyToken: ", error.message); // linea a eliminar
     res.status(401).json({ error: "Token inválido o expirado" });
   }
 };

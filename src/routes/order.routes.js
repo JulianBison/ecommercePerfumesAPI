@@ -9,7 +9,6 @@ import {
   editOrder,
   removeOrder,
 } from "../controllers/order.controller.js";
-import { createOrder } from "../services/order.services.js";
 
 const router = Router();
 

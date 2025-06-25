@@ -8,7 +8,7 @@ import {
 
 export const createOrderController = async (req, res) => {
   try {
-    const userId = req.userId; // Lo toma del token JWT
+    const userId = req.userId;
     const { items, total, shippingAddress, paymentMethod } = req.body;
 
     if (!items || items.length === 0) {
@@ -32,7 +32,7 @@ export const createOrderController = async (req, res) => {
 
 export const getUserOrders = async (req, res) => {
   try {
-    const userId = req.userId; // Lo extrae del token
+    const userId = req.userId;
     const orders = await getOrdersById(userId);
     res.json(orders);
   } catch (error) {

@@ -71,7 +71,6 @@ export const registerUser = async ({
     role_id: 1,
   });
 
-  // Obtener usuario con role para incluir nombre del role
   const userWithRole = await User.findOne({
     where: { id: newUser.id },
     include: [{ model: Role, attributes: ["name"] }],

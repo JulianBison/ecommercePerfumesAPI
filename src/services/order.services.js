@@ -44,7 +44,7 @@ export const getAllOrder = async () => {
       },
       {
         model: User,
-        attributes: ["first_name", "last_name", "email"], // incluir nombre y apellido
+        attributes: ["first_name", "last_name", "email"],
       },
     ],
   });
@@ -79,10 +79,8 @@ export const deleteOrder = async (id) => {
   const orden = await Order.findByPk(id);
   if (!orden) return null;
 
-  // Eliminar primero los items relacionados
   await OrderItem.destroy({ where: { order_id: id } });
 
-  // Luego la orden
   await orden.destroy();
 
   return orden;
