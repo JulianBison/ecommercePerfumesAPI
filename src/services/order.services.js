@@ -78,6 +78,12 @@ export const updateOrder = async (id, datos) => {
 export const deleteOrder = async (id) => {
   const orden = await Order.findByPk(id);
   if (!orden) return null;
+
+  // Eliminar primero los items relacionados
+  await OrderItem.destroy({ where: { order_id: id } });
+
+  // Luego la orden
   await orden.destroy();
+
   return orden;
 };
