@@ -68,7 +68,7 @@ export const registerUser = async ({
     email,
     password: hashedPassword,
     address,
-    role_id: 1,
+    role_id: 3,
   });
 
   // Obtener usuario con role para incluir nombre del role
