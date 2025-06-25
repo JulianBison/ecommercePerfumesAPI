@@ -16,7 +16,7 @@ const OrderItems = sequelize.define(
         model: 'orders',
         key: 'id'
       },
-      onDelete: 'CASCADE' // Opción aquí
+      onDelete: 'CASCADE'
     },
     product_id: {
       type: DataTypes.INTEGER,
