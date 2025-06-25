@@ -14,6 +14,7 @@ export const loginUser = async ({ email, password }) => {
       "address",
       "password",
       "role_id",
+      "active"
     ],
     include: [
       {
@@ -22,6 +23,12 @@ export const loginUser = async ({ email, password }) => {
       },
     ],
   });
+
+  if (!user.active) {
+    const error = new Error("Tu cuenta está desactivada. Por favor, contacta al administrador.");
+    error.status = 403; 
+    throw error;
+  }
 
   console.log("Usuario encontrado:", user?.toJSON()); // linea a eliminar
   console.log("Password ingresada:", password); // linea a eliminar
