@@ -1,6 +1,7 @@
 import Order from "../models/Order.js";
 import OrderItem from "../models/OrderItem.js";
 import Product from "../models/Product.js";
+import User from "../models/User.js";
 
 export const createOrder = async (datos) => {
   try {
@@ -41,6 +42,10 @@ export const getAllOrder = async () => {
         as: "items",
         include: [Product],
       },
+      {
+        model: User,
+        attributes: ["first_name", "last_name", "email"], // incluir nombre y apellido
+      },
     ],
   });
 };
@@ -53,6 +58,10 @@ export const getOrdersById = async (id) => {
         model: OrderItem,
         as: "items",
         include: [Product],
+      },
+      {
+        model: User,
+        attributes: ["first_name", "last_name"],
       },
     ],
     order: [["orderDate", "DESC"]],
