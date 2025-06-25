@@ -8,8 +8,11 @@ User.belongsTo(Role, { foreignKey: "role_id" });
 Role.hasMany(User, { foreignKey: "role_id" });
 
 Order.belongsTo(User, { foreignKey: "user_id" });
-User.hasMany(Order, { foreignKey: "user_id" });
-
+User.hasMany(Order, {
+    foreignKey: "user_id",
+    as: "orders",
+    onDelete: 'CASCADE'
+});
 OrderItem.belongsTo(Order, { foreignKey: "order_id" });
 Order.hasMany(OrderItem, {
     foreignKey: "order_id",
